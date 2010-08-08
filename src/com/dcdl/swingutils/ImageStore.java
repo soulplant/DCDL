@@ -1,10 +1,10 @@
 package com.dcdl.swingutils;
 
 import java.awt.Image;
+import java.awt.Toolkit;
+import java.io.File;
 import java.util.HashMap;
 import java.util.Map;
-
-import javax.swing.ImageIcon;
 
 /**
  * Loads images from the file system and caches them.
@@ -18,7 +18,10 @@ public class ImageStore {
     if (cachedImages.containsKey(filename)) {
       return cachedImages.get(filename);
     }
-    Image image = new ImageIcon(filename).getImage();
+    if (!new File(filename).canRead()) {
+      throw new IllegalArgumentException("Can't read from file '" + filename + "'");
+    }
+    Image image = Toolkit.getDefaultToolkit().getImage(filename);
     return cachedImages.put(filename, image);
   }
 }

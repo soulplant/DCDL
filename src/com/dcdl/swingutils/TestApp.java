@@ -4,7 +4,6 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 public class TestApp implements App {
@@ -17,20 +16,14 @@ public class TestApp implements App {
 
   private int counter;
   private long startTime = System.currentTimeMillis();
-  private Listener listener;
+  private final ImageStore imageStore = new ImageStore();
 
   @Override
   public KeyListener getKeyListener() {
-    return new KeyAdapter() {
-      @Override
-      public void keyPressed(KeyEvent e) {
-        preferredSize = new Dimension(640, 480);
-        listener.triggerResize();
-      }
-    };
+    return new KeyAdapter() {};
   }
 
-  private Dimension preferredSize = new Dimension(320, 240);
+  private final Dimension preferredSize = new Dimension(320, 240);
 
   @Override
   public Dimension getPreferredSize() {
@@ -47,6 +40,7 @@ public class TestApp implements App {
     g.setColor(Color.BLUE);
     g.clearRect(0, 0, 320, 240);
     g.drawString("frame: " + counter, 50, 50);
+    g.drawImage(imageStore.getImage("gfx/blue_block.png"), 0, 0, null);
   }
 
   @Override
@@ -62,6 +56,5 @@ public class TestApp implements App {
 
   @Override
   public void setAppListener(Listener listener) {
-    this.listener = listener;
   }
 }
