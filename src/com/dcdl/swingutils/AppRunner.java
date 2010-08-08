@@ -1,6 +1,7 @@
 package com.dcdl.swingutils;
 
 import javax.swing.JFrame;
+import javax.swing.JPanel;
 import javax.swing.SwingUtilities;
 
 /**
@@ -24,8 +25,9 @@ public class AppRunner {
     final JFrame frame = new JFrame(app.getTitle());
     frame.setResizable(false);
     frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-    final AppRenderer appRenderer = new AppRenderer(app);
-    frame.getContentPane().add(appRenderer);
+    JPanel jpanel = new JPanel(); // JPanel to render to.
+    final AppRenderer appRenderer = new AppRenderer(app, jpanel);
+    frame.getContentPane().add(jpanel);
     frame.pack();
     frame.setVisible(true);
     final KeyPressBucket keyPressBucket = new KeyPressBucket(app.getKeyListener());

@@ -6,15 +6,17 @@ import java.awt.Image;
 
 import javax.swing.JPanel;
 
-public class AppRenderer extends JPanel {
+public class AppRenderer {
   private static final long serialVersionUID = -153681560652326318L;
   private Image backBuffer;
   private final App app;
+  private final JPanel jpanel;
 
-  public AppRenderer(App app) {
+  public AppRenderer(App app, JPanel jpanel) {
     this.app = app;
-    setPreferredSize(app.getPreferredSize());
-    setDoubleBuffered(true);
+    this.jpanel = jpanel;
+    jpanel.setPreferredSize(app.getPreferredSize());
+    jpanel.setDoubleBuffered(true);
   }
 
   public void render() {
@@ -22,24 +24,24 @@ public class AppRenderer extends JPanel {
     Graphics backBufferGraphics = backBuffer.getGraphics();
     app.render(backBufferGraphics);
 
-    Graphics g = getGraphics();
+    Graphics g = jpanel.getGraphics();
     g.drawImage(backBuffer, 0, 0, null);
     g.dispose();
     backBufferGraphics.dispose();
-  }
-
-  private void ensureBackBufferExists() {
-    if (backBuffer == null) {
-      Dimension preferredDimensions = app.getPreferredSize();
-      backBuffer = createImage(preferredDimensions.width, preferredDimensions.height);
-    }
   }
 
   public void setSize(Dimension size) {
     if (!hasSize(backBuffer, size)) {
       backBuffer = null; // Back buffer is now the wrong size.
     }
-    setPreferredSize(size);
+    jpanel.setPreferredSize(size);
+  }
+
+  private void ensureBackBufferExists() {
+    if (backBuffer == null) {
+      Dimension preferredDimensions = app.getPreferredSize();
+      backBuffer = jpanel.createImage(preferredDimensions.width, preferredDimensions.height);
+    }
   }
 
   /**
