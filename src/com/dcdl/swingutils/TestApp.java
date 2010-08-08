@@ -21,7 +21,7 @@ public class TestApp implements App {
 
   @Override
   public KeyListener getKeyListener() {
-    return new KeyAdapter(){
+    return new KeyAdapter() {
       @Override
       public void keyPressed(KeyEvent e) {
         preferredSize = new Dimension(640, 480);
@@ -64,5 +64,4 @@ public class TestApp implements App {
   public void setAppListener(Listener listener) {
     this.listener = listener;
   }
-
 }
