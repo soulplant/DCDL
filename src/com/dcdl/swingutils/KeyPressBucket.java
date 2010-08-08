@@ -6,6 +6,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Accumulates key events and sends them synchronously in bulk when the
+ * {@link #emptyBucket()} method is called. This is used to control when key
+ * events fire so they don't happen in the middle of a game's logic tick.
+ *
+ * @author james
+ */
 public class KeyPressBucket implements KeyListener {
   private enum Type {
     PRESS, RELEASE, TYPE
