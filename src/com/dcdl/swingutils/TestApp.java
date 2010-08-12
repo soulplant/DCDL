@@ -16,7 +16,6 @@ public class TestApp implements App {
 
   private int counter;
   private long startTime = System.currentTimeMillis();
-  private final ImageStore imageStore = new ImageStore();
 
   @Override
   public KeyListener getKeyListener() {
@@ -39,8 +38,8 @@ public class TestApp implements App {
   public void render(Graphics g) {
     g.setColor(Color.BLUE);
     g.clearRect(0, 0, 320, 240);
+    g.drawRect(0, 0, 10, 10);
     g.drawString("frame: " + counter, 50, 50);
-    g.drawImage(imageStore.getImage("gfx/blue_block.png"), 0, 0, null);
   }
 
   @Override
