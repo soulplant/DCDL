@@ -33,6 +33,9 @@ public class AppRunner {
     final KeyPressBucket keyPressBucket = new KeyPressBucket(app.getKeyListener());
     frame.addKeyListener(keyPressBucket);
 
+    final MouseMoveBucket mouseMoveBucket = new MouseMoveBucket(app.getMouseListener());
+    frame.addMouseListener(mouseMoveBucket);
+
     app.setAppListener(new App.Listener() {
       @Override
       public void triggerResize() {
@@ -51,6 +54,7 @@ public class AppRunner {
           while (curTime - lastTickTime > millisPerTick) {
             lastTickTime += millisPerTick;
             keyPressBucket.emptyBucket();
+            mouseMoveBucket.emptyBucket();
             app.tick();
           }
           appRenderer.render();
