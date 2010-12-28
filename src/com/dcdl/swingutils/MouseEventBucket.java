@@ -6,12 +6,12 @@ import java.awt.event.MouseMotionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MouseMoveBucket implements MouseListener, MouseMotionListener {
+public class MouseEventBucket implements MouseListener, MouseMotionListener {
   private final List<MouseEvent> events = new ArrayList<MouseEvent>();
   private final MouseListener listener;
   private final MouseMotionListener motionListener;
 
-  public MouseMoveBucket(MouseListener listener, MouseMotionListener motionListener) {
+  public MouseEventBucket(MouseListener listener, MouseMotionListener motionListener) {
     this.listener = listener;
     this.motionListener = motionListener;
   }
