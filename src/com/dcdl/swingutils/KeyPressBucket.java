@@ -3,7 +3,6 @@ package com.dcdl.swingutils;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 /**
@@ -14,62 +13,50 @@ import java.util.List;
  * @author james
  */
 public class KeyPressBucket implements KeyListener {
-  private enum Type {
-    PRESS, RELEASE, TYPE
-  }
-  private static class StoredKeyEvent {
-    private final Type type;
-    private final KeyEvent event;
-
-    public StoredKeyEvent(Type type, KeyEvent event) {
-      this.type = type;
-      this.event = event;
-    }
-
-    public void sendToKeyListener(KeyListener keyListener) {
-      switch (type) {
-      case PRESS:
-        keyListener.keyPressed(event);
-        break;
-      case RELEASE:
-        keyListener.keyReleased(event);
-        break;
-      case TYPE:
-        keyListener.keyTyped(event);
-        break;
-      }
-    }
-  }
-
   private final KeyListener keyListener;
-  private final List<StoredKeyEvent> keyPressedEvents =
-    Collections.synchronizedList(new ArrayList<StoredKeyEvent>());
+  private final List<KeyEvent> queuedEvents = new ArrayList<KeyEvent>();
 
   public KeyPressBucket(KeyListener keyListener) {
     this.keyListener = keyListener;
   }
 
+  private void queueEvent(KeyEvent e) {
+    synchronized (queuedEvents) {
+      queuedEvents.add(e);
+    }
+  }
+
   @Override
   public void keyPressed(KeyEvent e) {
-    keyPressedEvents.add(new StoredKeyEvent(Type.PRESS, e));
+    queueEvent(e);
   }
 
   @Override
   public void keyReleased(KeyEvent e) {
-    keyPressedEvents.add(new StoredKeyEvent(Type.RELEASE, e));
+    queueEvent(e);
   }
 
   @Override
   public void keyTyped(KeyEvent e) {
-    keyPressedEvents.add(new StoredKeyEvent(Type.TYPE, e));
+    queueEvent(e);
   }
 
   public void emptyBucket() {
-    synchronized (keyPressedEvents) {
-      for (StoredKeyEvent keyPressedEvent : keyPressedEvents) {
-        keyPressedEvent.sendToKeyListener(keyListener);
+    synchronized (queuedEvents) {
+      for (KeyEvent event : queuedEvents) {
+        switch (event.getID()) {
+        case KeyEvent.KEY_PRESSED:
+          keyListener.keyPressed(event);
+          break;
+        case KeyEvent.KEY_RELEASED:
+          keyListener.keyReleased(event);
+          break;
+        case KeyEvent.KEY_TYPED:
+          keyListener.keyTyped(event);
+          break;
+        }
       }
-      keyPressedEvents.clear();
+      queuedEvents.clear();
     }
   }
 }
