@@ -12,11 +12,11 @@ import java.util.List;
  *
  * @author james
  */
-public class KeyPressBucket implements KeyListener {
+public class KeyEventBucket implements KeyListener {
   private final KeyListener keyListener;
   private final List<KeyEvent> queuedEvents = new ArrayList<KeyEvent>();
 
-  public KeyPressBucket(KeyListener keyListener) {
+  public KeyEventBucket(KeyListener keyListener) {
     this.keyListener = keyListener;
   }
 

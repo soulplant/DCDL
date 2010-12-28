@@ -30,7 +30,7 @@ public class AppRunner {
     frame.getContentPane().add(jpanel);
     frame.pack();
     frame.setVisible(true);
-    final KeyPressBucket keyPressBucket = new KeyPressBucket(app.getKeyListener());
+    final KeyEventBucket keyPressBucket = new KeyEventBucket(app.getKeyListener());
     frame.addKeyListener(keyPressBucket);
 
     final MouseEventBucket mouseMoveBucket = new MouseEventBucket(app.getMouseListener(), app.getMouseMotionListener());
