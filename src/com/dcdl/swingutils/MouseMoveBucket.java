@@ -2,40 +2,61 @@ package com.dcdl.swingutils;
 
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
-import java.util.LinkedList;
+import java.awt.event.MouseMotionListener;
+import java.util.ArrayList;
 import java.util.List;
 
-public class MouseMoveBucket implements MouseListener {
-  private final List<MouseEvent> events = new LinkedList<MouseEvent>();
+public class MouseMoveBucket implements MouseListener, MouseMotionListener {
+  private final List<MouseEvent> events = new ArrayList<MouseEvent>();
   private final MouseListener listener;
+  private final MouseMotionListener motionListener;
 
-  public MouseMoveBucket(MouseListener listener) {
+  public MouseMoveBucket(MouseListener listener, MouseMotionListener motionListener) {
     this.listener = listener;
+    this.motionListener = motionListener;
+  }
+
+  private void queueEvent(MouseEvent e) {
+    synchronized (events) {
+      events.add(e);
+    }
   }
 
   @Override
   public void mouseClicked(MouseEvent e) {
-    events.add(e);
+    queueEvent(e);
   }
 
   @Override
   public void mouseEntered(MouseEvent e) {
-    events.add(e);
+    queueEvent(e);
   }
 
   @Override
   public void mouseExited(MouseEvent e) {
-    events.add(e);
+    queueEvent(e);
   }
 
   @Override
   public void mousePressed(MouseEvent e) {
-    events.add(e);
+    queueEvent(e);
   }
 
   @Override
   public void mouseReleased(MouseEvent e) {
-    events.add(e);
+    queueEvent(e);
+  }
+
+
+  // Motion events.
+  @Override
+  public void mouseDragged(MouseEvent e) {
+    queueEvent(e);
+  }
+
+  @Override
+  public void mouseMoved(MouseEvent e) {
+    queueEvent(e);
   }
 
   public void emptyBucket() {
@@ -57,10 +78,16 @@ public class MouseMoveBucket implements MouseListener {
         case MouseEvent.MOUSE_RELEASED:
           listener.mouseReleased(event);
           break;
+        // Motion events.
+        case MouseEvent.MOUSE_DRAGGED:
+          motionListener.mouseDragged(event);
+          break;
+        case MouseEvent.MOUSE_MOVED:
+          motionListener.mouseMoved(event);
+          break;
         }
       }
       events.clear();
     }
   }
-
 }

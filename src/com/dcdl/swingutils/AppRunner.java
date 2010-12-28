@@ -33,8 +33,9 @@ public class AppRunner {
     final KeyPressBucket keyPressBucket = new KeyPressBucket(app.getKeyListener());
     frame.addKeyListener(keyPressBucket);
 
-    final MouseMoveBucket mouseMoveBucket = new MouseMoveBucket(app.getMouseListener());
+    final MouseMoveBucket mouseMoveBucket = new MouseMoveBucket(app.getMouseListener(), app.getMouseMotionListener());
     frame.addMouseListener(mouseMoveBucket);
+    frame.addMouseMotionListener(mouseMoveBucket);
 
     app.setAppListener(new App.Listener() {
       @Override

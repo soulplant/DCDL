@@ -8,6 +8,8 @@ import java.awt.event.KeyListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.awt.event.MouseMotionAdapter;
+import java.awt.event.MouseMotionListener;
 
 public class TestApp implements App {
 
@@ -68,5 +70,10 @@ public class TestApp implements App {
         System.out.println("Clicked at " + e + "!");
       }
     };
+  }
+
+  @Override
+  public MouseMotionListener getMouseMotionListener() {
+    return new MouseMotionAdapter() {};
   }
 }
