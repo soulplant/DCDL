@@ -52,13 +52,17 @@ public class AppRunner {
       public void run() {
         while (true) {
           long curTime = System.currentTimeMillis();
+          boolean ticked = false;
           while (curTime - lastTickTime > millisPerTick) {
             lastTickTime += millisPerTick;
             keyPressBucket.emptyBucket();
             mouseMoveBucket.emptyBucket();
             app.tick();
+            ticked = true;
           }
-          appRenderer.render();
+          if (ticked) {
+            appRenderer.render();
+          }
         }
       }
     }.start();
