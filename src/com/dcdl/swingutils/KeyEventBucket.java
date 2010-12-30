@@ -16,6 +16,7 @@ import java.util.List;
 public class KeyEventBucket implements KeyListener {
   private final KeyListener keyListener;
   private final List<KeyEvent> queuedEvents = new ArrayList<KeyEvent>();
+  private final List<KeyEvent> pendingRelease = new ArrayList<KeyEvent>();
 
   public KeyEventBucket(KeyListener keyListener) {
     if (keyListener == null) {
@@ -51,6 +52,34 @@ public class KeyEventBucket implements KeyListener {
 
   public void emptyBucket() {
     synchronized (queuedEvents) {
+      for (int i = 0; i < queuedEvents.size(); i++) {
+        KeyEvent event = queuedEvents.get(i);
+
+        if (event.getID() == KeyEvent.KEY_RELEASED) {
+          // Could be fake - if there are any other events on this key let's kill them all.
+          boolean isReleaseFake = false;
+          for (int j = i + 1; j < queuedEvents.size(); j++) {
+            KeyEvent maybeFake = queuedEvents.get(i);
+            if (maybeFake.getKeyCode() == event.getKeyCode()) {
+              // Fake!
+              System.out.println("FAKE!");
+              isReleaseFake = true;
+              queuedEvents.remove(j);
+              j--;
+            }
+          }
+          if (isReleaseFake) {
+            queuedEvents.remove(i);
+            i--;
+          }
+        }
+      }
+
+
+
+
+      System.out.println("queuedEvents = " + queuedEvents);
+      System.out.println("# = " + queuedEvents.size());
       for (KeyEvent event : queuedEvents) {
         switch (event.getID()) {
         case KeyEvent.KEY_PRESSED:
