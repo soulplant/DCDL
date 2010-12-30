@@ -1,5 +1,6 @@
 package com.dcdl.swingutils;
 
+import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.awt.event.MouseMotionListener;
@@ -12,8 +13,16 @@ public class MouseEventBucket implements MouseListener, MouseMotionListener {
   private final MouseMotionListener motionListener;
 
   public MouseEventBucket(MouseListener listener, MouseMotionListener motionListener) {
-    this.listener = listener;
-    this.motionListener = motionListener;
+    if (listener == null) {
+      this.listener = new MouseAdapter() {};
+    } else {
+      this.listener = listener;
+    }
+    if (motionListener == null) {
+      this.motionListener = new MouseAdapter() {};
+    } else {
+      this.motionListener = motionListener;
+    }
   }
 
   private void queueEvent(MouseEvent e) {

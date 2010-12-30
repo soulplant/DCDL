@@ -1,5 +1,6 @@
 package com.dcdl.swingutils;
 
+import java.awt.event.KeyAdapter;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.util.ArrayList;
@@ -17,10 +18,17 @@ public class KeyEventBucket implements KeyListener {
   private final List<KeyEvent> queuedEvents = new ArrayList<KeyEvent>();
 
   public KeyEventBucket(KeyListener keyListener) {
-    this.keyListener = keyListener;
+    if (keyListener == null) {
+      this.keyListener = new KeyAdapter() {};
+    } else {
+      this.keyListener = keyListener;
+    }
   }
 
   private void queueEvent(KeyEvent e) {
+    if (keyListener == null) {
+      return;
+    }
     synchronized (queuedEvents) {
       queuedEvents.add(e);
     }
